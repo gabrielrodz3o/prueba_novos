@@ -1,6 +1,6 @@
 <!-- MyInputText.vue -->
 <template>
-    <input type="text" class="input" :placeholder="props.placeholder" :value="modelValue" @input="handleInput" />
+    <input type="text" class="input" :placeholder="props.placeholder" :value="modelValue" />
 </template>
   
 <script lang="ts" setup>

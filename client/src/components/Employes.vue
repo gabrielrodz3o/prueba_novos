@@ -10,8 +10,21 @@ const props = defineProps({
     show: Boolean,
     companie: Object as () => Company,
 })
-const add = async() => {
+interface Emits {
+    (e: "close"): void;
 
+}
+const emits = defineEmits<Emits>()
+    const showError=ref(false)
+const add = async() => {
+    if(employe.value.name==='')
+    {
+        showError.value=true 
+            setTimeout(() => {
+                showError.value=false 
+            }, 3000);
+        return
+    }
     employe.value.id = props.companie?.employes?.length ?? 0 + 1;
 
    
@@ -20,6 +33,15 @@ const add = async() => {
         ...employe.value 
     }
     const response=await addEmploye(data)
+    if(response)
+    {
+        emits('close')
+        employe.value.name=''
+        employe.value.address=''
+        employe.value.dni=''
+        employe.value.phone=''
+        employe.value.salary=0
+    }
   
 }
 
@@ -46,13 +68,15 @@ const employe = ref<Employe>({address:"",dni:"",email:"",id:null,name:"",phone:"
                     <input type="text" class="input spacing" placeholder="Correo" v-model="employe.email" />
                     <input type="text" class="input spacing" placeholder="Salario" v-model="employe.salary" />
                 </div>
-
+                <div v-if="showError" >
+                       <span style="color: red;">Debes agregar un nombre </span>     
+                        </div>
                 <div class="modal-footer">
                     <slot name="footer">
 
 
 
-                        <MyButton @click="$emit('close'), add()">Guardar</MyButton>
+                        <MyButton @click=" add()">Guardar</MyButton>
                         <MyButton @click="$emit('close')">Cerrar</MyButton>
 
                     </slot>

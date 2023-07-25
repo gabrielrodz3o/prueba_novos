@@ -18,7 +18,7 @@
     <CompaniesModal
       :show="showModal"
       :companie="selectedCompanie"
-      @close="showModal = false"
+      @close="close"
     >
       <template #header>
         <h3 style="text-align: center">Agregar compañía</h3>
@@ -50,6 +50,11 @@ const paginatedCompanies = computed(() => {
 const showModal = ref(false)
 const selectedCompanie = ref<Company>({ id: null, description: "", name: "" ,employes:[]})
 
+const close=()=>{
+  showModal.value=false
+  selectedCompanie.value.name=''
+
+}
 const getPage = (id: number) => {
     store.dispatch('setPage', id);
 }

@@ -1,7 +1,7 @@
 <template>
      
    <div class="autocomplete-container">
-
+    
     <input
       ref="input"
       type="text"
@@ -22,12 +22,8 @@
 </template>
   
 <script lang="ts" setup>
-import { ref ,onMounted} from "vue";
-import { useStore } from 'vuex'
+import { ref } from "vue";
 import { type Company } from "../../types/Companies";
-
-const store = useStore()
-
 const props = defineProps<{
     companies: Company[];
   
@@ -39,7 +35,7 @@ const emits=defineEmits<Emits>()
 
 const suggestions = ref<Company[]>(props.companies);
 const filteredSuggestions = ref<Company[]>([]);
-const inputValue = ref({id:0,name:""})
+const inputValue = ref<Company>({id:null,name:"",description:"",employes:[]})
 const showSuggestions = ref<boolean>(false);
 
 const onInput = () => {
@@ -58,23 +54,11 @@ const onSuggestionClick = (suggestion: Company) => {
     if(typeof(suggestion.id)=="number")
     {
       emits('selectedCompany', suggestion.id)
-      inputValue.value=suggestion
+     inputValue.value=suggestion
     }
 
-
- //  store.state.companies.selectedCompany = suggestion;
   showSuggestions.value = false;
 };
-
-onMounted(() => {
-    document.addEventListener("click", (event) => {
-        const autocomplete = document.getElementById("autocomplete");
-
-        if (autocomplete && !autocomplete.contains(event.target as Node)) {
-            showSuggestions.value = false;
-        }
-    });
-});
 
 
 </script>

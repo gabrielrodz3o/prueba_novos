@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import { computed, ref, watch, onMounted } from 'vue';
+import {  ref,  onMounted } from 'vue';
 import { useStore } from 'vuex'
 import { VueDraggableNext } from 'vue-draggable-next'
 import { getCompanies, getCompaniesById } from "../composables/companies"
 
-import { type Employe, type Company } from '../types/Companies';
+import { type Employe } from '../types/Companies';
 const store = useStore()
 const employees = ref<Employe[]>([])
 const loading = ref<boolean>(false)
@@ -17,11 +17,11 @@ onMounted(async () => {
   loading.value = false
 })
 const edit = async (id:number) => {
+
   employees.value = []
   loading.value = true
 
   const data = await getCompaniesById(id)
-
   employees.value = data.data
 
   loading.value = false
@@ -31,28 +31,26 @@ const edit = async (id:number) => {
 <template>
   <div style="text-align: center">
     <h1>Compañías</h1>
-    <div v-if="!loading">
-
-
-      <div style="margin-top: 10px">
-        <my-auto-complete  @selectedCompany="edit"  :companies="store.getters.getCompanies" />
-    
+    <div style="margin-top: 10px">
+        <my-auto-complete
+          @selectedCompany="edit"
+          :companies="store.getters.getCompanies"
+        />
       </div>
+    <div v-if="!loading">
+    
 
       <div v-if="employees.length > 0">
+        <div style="margin-top: 10px;margin-bottom: 10px;font-size: 20px;">Empleados</div>
         <VueDraggableNext :list="employees">
           <div class="draggable-item" v-for="element in employees" :key="element.id">
             {{ element.name }}
           </div>
         </VueDraggableNext>
       </div>
-      <div v-else style="margin-top: 50px;">
-        No hay empleados
-      </div>
+      <div v-else style="margin-top: 50px">No hay empleados</div>
     </div>
-    <div v-else>
-      Loading...
-    </div>
+    <div v-else>Loading...</div>
   </div>
 </template>
 <style>
