@@ -25,7 +25,6 @@
 import { ref ,onMounted} from "vue";
 import { useStore } from 'vuex'
 import { type Company } from "../../types/Companies";
-import { companies } from '../../store/companies';
 
 const store = useStore()
 
@@ -36,7 +35,7 @@ const props = defineProps<{
 
 const suggestions = ref<Company[]>(props.companies);
 const filteredSuggestions = ref<Company[]>([]);
-const inputValue = store.state.companies.selectedCompany
+const inputValue = ref({id:0,name:""})
 const showSuggestions = ref<boolean>(false);
 
 const onInput = () => {
@@ -47,15 +46,15 @@ const onInput = () => {
 const filterSuggestions = () => {
 
   filteredSuggestions.value = suggestions.value.filter((item) =>
-    item.name.toLowerCase().includes(inputValue.name)
+    item.name.toLowerCase().includes(inputValue.value.name)
   );
 };
 
 const onSuggestionClick = (suggestion: Company) => {
     
     store.dispatch('selectCompany',suggestion);
-    inputValue.name=suggestion.name
-   // store.state.companies.selectedCompany = suggestion;
+    inputValue.value=suggestion
+ //  store.state.companies.selectedCompany = suggestion;
   showSuggestions.value = false;
 };
 

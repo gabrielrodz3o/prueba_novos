@@ -1,40 +1,57 @@
 <script lang="ts" setup>
-import { computed, ref, watch } from 'vue';
+import { computed, ref, watch, onMounted } from 'vue';
 import { useStore } from 'vuex'
 import { VueDraggableNext } from 'vue-draggable-next'
-
+import { getCompanies, getCompaniesById } from "../composables/companies"
 
 import { type Employe, type Company } from '../types/Companies';
 const store = useStore()
 const employees = ref<Employe[]>([])
+const loading = ref<boolean>(false)
+onMounted(async () => {
 
-const edit=()=>{
-  employees.value=[]
-  const data = store.getters.getCompanies.filter(company => company.id === store.getters.getSelectedCompany.id)
+  loading.value = true
+  const companies = await getCompanies()
 
-  if(data.length>0)
-  {
+  store.dispatch('setCompanies', companies);
+  loading.value = false
+})
+const edit = async () => {
+  employees.value = []
+  loading.value = true
+  console.log(store.getters.getSelectedCompany.id)
+  const data = await getCompaniesById(store.getters.getSelectedCompany.id)
 
-    employees.value = data[0].employes
-  }
+  employees.value = data.data
 
+  loading.value = false
 }
 </script>
 
 <template>
   <div style="text-align: center">
     <h1>Compañías</h1>
+    <div v-if="!loading">
 
-    <div style="margin-top: 10px">
-      <my-auto-complete @change="edit" :companies="store.getters.getCompanies" />
+
+      <div style="margin-top: 10px">
+        <my-auto-complete @change="edit" :companies="store.getters.getCompanies" />
+    
+      </div>
+
+      <div v-if="employees.length > 0">
+        <VueDraggableNext :list="employees">
+          <div class="draggable-item" v-for="element in employees" :key="element.id">
+            {{ element.name }}
+          </div>
+        </VueDraggableNext>
+      </div>
+      <div v-else style="margin-top: 50px;">
+        No hay empleados
+      </div>
     </div>
-
-    <div v-if="employees.length > 0">
-      <VueDraggableNext :list="employees">
-        <div class="draggable-item" v-for="element in employees" :key="element.id">
-          {{ element.name }}
-        </div>
-      </VueDraggableNext>
+    <div v-else>
+      Loading...
     </div>
   </div>
 </template>

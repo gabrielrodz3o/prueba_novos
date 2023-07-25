@@ -47,15 +47,10 @@ const paginatedCompanies = computed(() => {
     return companies.value.slice(startIndex, endIndex);
 });
 
-
-
 const showModal = ref(false)
-
-
 const selectedCompanie = ref<Company>({ id: null, description: "", name: "" ,employes:[]})
 
 const getPage = (id: number) => {
-
     store.dispatch('setPage', id);
 }
 </script>

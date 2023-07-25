@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Company;
 
 class CompanyController extends Controller
 {
@@ -11,11 +12,23 @@ class CompanyController extends Controller
         $companies = Company::all();
         return response()->json($companies);
     }
-
     public function store(Request $request)
     {
-        $company = Company::create($request->all());
+        $data = $request->validate([
+            'name' => 'required|string',
+            'description' => 'required|string',
+        ]);
+
+
+        $company = Company::create($data);
+
         return response()->json($company, 201);
     }
+    public function showEmployeesByCompany($companyId)
+    {
+        $company = Company::findOrFail($companyId);
+        $employees = $company->employees;
 
-   
+        return response()->json($employees);
+    }
+}

@@ -4,20 +4,23 @@ import { useStore } from 'vuex'
 import { type Company } from '@/types/Companies';
 import { ref } from 'vue';
 import {type Employe } from '../types/Companies';
+import { addEmploye } from '@/composables/companies';
 const store = useStore()
 const props = defineProps({
     show: Boolean,
     companie: Object as () => Company,
 })
-const add = () => {
+const add = async() => {
 
     employe.value.id = props.companie?.employes?.length ?? 0 + 1;
 
+   
     var data={
-        companies:props.companie,
-        employes:employe.value 
+        company_id:props.companie?.id,
+        ...employe.value 
     }
-    store.dispatch('addEmploye',data );
+    const response=await addEmploye(data)
+  
 }
 
 const employe = ref<Employe>({address:"",dni:"",email:"",id:null,name:"",phone:"",salary:0,} )
