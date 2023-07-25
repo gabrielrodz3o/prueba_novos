@@ -9,7 +9,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="(company, index) of props.companies" :key="company" style="border-bottom: 1px solid #ccc;">
+            <tr v-for="(company) of props.companies" :key="company.id" style="border-bottom: 1px solid #ccc;">
                 <td style="padding: 8px;">{{ company.name }}</td>
                 <td style="padding: 8px;">
                     <MyButton style="margin-right: 4px;" @click="selectCompany(company)">Nuevo empleado</MyButton>

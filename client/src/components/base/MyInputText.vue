@@ -4,7 +4,7 @@
 </template>
   
 <script lang="ts" setup>
-import { ref, defineProps, withDefaults } from 'vue';
+import { ref } from 'vue';
 
 const props = withDefaults(defineProps<{
     placeholder?: string;

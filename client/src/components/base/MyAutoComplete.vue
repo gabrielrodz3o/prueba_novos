@@ -32,6 +32,10 @@ const props = defineProps<{
     companies: Company[];
   
 }>();
+interface Emits {
+  (e: "selectedCompany", id: number): void;
+}
+const emits=defineEmits<Emits>()
 
 const suggestions = ref<Company[]>(props.companies);
 const filteredSuggestions = ref<Company[]>([]);
@@ -51,9 +55,13 @@ const filterSuggestions = () => {
 };
 
 const onSuggestionClick = (suggestion: Company) => {
-    
-    store.dispatch('selectCompany',suggestion);
-    inputValue.value=suggestion
+    if(typeof(suggestion.id)=="number")
+    {
+      emits('selectedCompany', suggestion.id)
+      inputValue.value=suggestion
+    }
+
+
  //  store.state.companies.selectedCompany = suggestion;
   showSuggestions.value = false;
 };

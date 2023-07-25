@@ -16,11 +16,11 @@ onMounted(async () => {
   store.dispatch('setCompanies', companies);
   loading.value = false
 })
-const edit = async () => {
+const edit = async (id:number) => {
   employees.value = []
   loading.value = true
-  console.log(store.getters.getSelectedCompany.id)
-  const data = await getCompaniesById(store.getters.getSelectedCompany.id)
+
+  const data = await getCompaniesById(id)
 
   employees.value = data.data
 
@@ -35,7 +35,7 @@ const edit = async () => {
 
 
       <div style="margin-top: 10px">
-        <my-auto-complete @change="edit" :companies="store.getters.getCompanies" />
+        <my-auto-complete  @selectedCompany="edit"  :companies="store.getters.getCompanies" />
     
       </div>
 

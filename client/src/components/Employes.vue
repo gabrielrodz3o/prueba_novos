@@ -1,7 +1,7 @@
 
 <script lang="ts" setup>
 import { useStore } from 'vuex'
-import { type Company } from '@/types/Companies';
+import type {  Company } from '@/types/Companies';
 import { ref } from 'vue';
 import {type Employe } from '../types/Companies';
 import { addEmploye } from '@/composables/companies';
