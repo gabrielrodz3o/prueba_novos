@@ -2,19 +2,26 @@
 <script lang="ts" setup>
 import { useStore } from 'vuex'
 import { type Company } from '@/types/Companies';
+import { getCompanies, addCompanies } from '../composables/companies';
 const store = useStore()
 const props = defineProps({
     show: Boolean,
     companie: Object as () => Company,
 })
-const add = () => {
-
-    store.dispatch('addCompany', {
-        id: store.state.companies.companies.length + 1,
+const add = async () => {
+    
+    var formData = {
         name: props.companie?.name,
-        description: 'This is a company description.',
-        employes:[]
-    });
+        description: '.',
+    }
+  
+    const response = await addCompanies(formData)
+
+    if (response.status===201) {
+        const companies = await getCompanies()
+
+        store.dispatch('setCompanies', companies);
+    }
 }
 </script>
 
@@ -27,18 +34,19 @@ const add = () => {
                 </div>
 
                 <div class="modal-body">
-                    <slot name="body"> <input type="text" v-model="props.companie.name" placeholder="name" name="branch">
+                    <slot name="body"> 
+                        <input type="text" v-model="props.companie.name" placeholder="name" name="branch">
                     </slot>
                 </div>
 
                 <div class="modal-footer">
                     <slot name="footer">
-                         
 
-                         
+
+
                         <MyButton @click="$emit('close'), add()">Guardar</MyButton>
                         <MyButton @click="$emit('close')">Cerrar</MyButton>
-                
+
                     </slot>
                 </div>
             </div>
